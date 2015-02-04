@@ -54,10 +54,12 @@ module Fuzzily
 
       module Rails3
         def _matches_for_trigrams(trigrams)
+          binding.pry
           self.
             select('owner_id, owner_type, count(*) AS matches, MAX(score) AS score').
             group('owner_id, owner_type').
             order('matches DESC, score ASC').
+            where('score > 10.0').
             with_trigram(trigrams)
         end
 
