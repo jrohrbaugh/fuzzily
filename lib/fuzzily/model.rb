@@ -24,7 +24,6 @@ module Fuzzily
 
     module ClassMethods
       def matches_for(text)
-        binding.pry
         _matches_for_trigrams Fuzzily::String.new(text).trigrams
       end
 
@@ -56,16 +55,16 @@ module Fuzzily
       module Rails3
         def _matches_for_trigrams(trigrams)
           binding.pry
+          threshold ||= 10
           self.
             select('owner_id, owner_type, count(*) AS matches, MAX(score) AS score').
             group('owner_id, owner_type').
             order('matches DESC, score ASC').
-            where('score > 10.0').
+            having('count(*) > ?', threshold).
             with_trigram(trigrams)
         end
 
         def _add_fuzzy_scopes
-          binding.pry
           scope :for_model,  lambda { |model|
             where(:owner_type => model.kind_of?(Class) ? model.name : model)
           }

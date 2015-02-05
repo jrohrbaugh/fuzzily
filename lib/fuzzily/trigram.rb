@@ -4,7 +4,6 @@ module Fuzzily
   class String < SimpleDelegator
 
     def trigrams
-      binding.pry
       return [] if __getobj__.nil?
       normalized = self.normalize
       number_of_trigrams = normalized.length - 3
@@ -12,7 +11,6 @@ module Fuzzily
     end
 
     def scored_trigrams
-      binding.pry
       trigrams.map { |t| [t, self.length] }
     end
 
