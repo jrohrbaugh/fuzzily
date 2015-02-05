@@ -15,6 +15,7 @@ module Fuzzily
     private
 
     def _update_fuzzy!(_o)
+      binding.pry
       self.send(_o.trigram_association).delete_all
       String.new(self.send(_o.field)).scored_trigrams.each do |trigram, score|
         self.send(_o.trigram_association).build.tap do |record|
@@ -30,6 +31,7 @@ module Fuzzily
     module ClassMethods
       # fuzzily_searchable <field> [, <field>...] [, <options>]
       def fuzzily_searchable(*fields)
+        binding.pry
         options = fields.last.kind_of?(Hash) ? fields.pop : {}
 
         fields.each do |field|
@@ -40,6 +42,7 @@ module Fuzzily
       private
 
       def _find_by_fuzzy(_o, pattern, options={})
+        binding.pry
         options[:limit] ||= 10
         options[:offset] ||= 0
 
@@ -55,12 +58,14 @@ module Fuzzily
       end
 
       def _load_for_ids(ids)
+        binding.pry
         {}.tap do |result|
           find(ids).each { |_r| result[_r.id] = _r }
         end
       end
 
       def _bulk_update_fuzzy(_o)
+        binding.pry
         trigram_class = _o.trigram_class_name.constantize
 
         supports_bulk_inserts  =
@@ -195,6 +200,7 @@ module Fuzzily
       end
 
       def _with_included_trigrams(_o)
+        binding.pry
         self.includes(_o.trigram_association)
       end
     end

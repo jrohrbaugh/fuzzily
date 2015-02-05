@@ -24,6 +24,7 @@ module Fuzzily
 
     module ClassMethods
       def matches_for(text)
+        binding.pry
         _matches_for_trigrams Fuzzily::String.new(text).trigrams
       end
 
@@ -64,6 +65,7 @@ module Fuzzily
         end
 
         def _add_fuzzy_scopes
+          binding.pry
           scope :for_model,  lambda { |model|
             where(:owner_type => model.kind_of?(Class) ? model.name : model)
           }
